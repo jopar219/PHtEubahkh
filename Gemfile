@@ -71,3 +71,7 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem 'pdf-reader', '~> 2.11'
+gem 'ruby-openai', '~> 4.1'
+gem "neighbor"
