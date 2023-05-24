@@ -1,10 +1,10 @@
-export const askQuestionAPI = (text) => {
-  console.error("Not Implemented");
-  //   return fetch("/api/question", {
-  //     method: "POST",
-  //     body: JSON.stringify({ text }),
-  //     signal: abortController.signal,
-  //   });
+export const postQuestion = async (text) => {
+  const res = await fetch("/api/question", {
+    method: "POST",
+    body: JSON.stringify({ text })
+  });
+
+  return res.json();
 };
 
 export const imFeelingLucky = () => {
@@ -15,6 +15,15 @@ export const imFeelingLucky = () => {
   //     signal: abortController.signal,
   //   });
 };
+
+export const createBook = async (formData) => {
+  const res = await fetch("/api/book", {
+    method: "POST",
+    body: formData,
+  });
+
+  return res.json();
+}
 
 export const mock = () => {
   return new Promise((res, rej) => {
