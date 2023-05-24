@@ -10,9 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_24_190414) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_24_190651) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
 
+  create_table "books", force: :cascade do |t|
+    t.string "name"
+    t.string "link"
+    t.string "cover"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.bigint "book_id", null: false
+    t.integer "page_number"
+    t.text "content"
+    t.vector "embedding", limit: 4096
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_pages_on_book_id"
+  end
+
+  add_foreign_key "pages", "books"
 end
