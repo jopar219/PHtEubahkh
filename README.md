@@ -2,7 +2,7 @@
 
 Coding challege for gumroad.
 
-View live version here: https://gumroad-challenge.onrender.com. **Note images appear to be broken some hours after upload due to a limitation in render's free tier**
+View live version here: https://gumroad-challenge.onrender.com. **Note images appear to be broken some hours after upload due to a limitation in render's free tier. Also render may sometimes decide to send SIGKILL while uploading books with many pages.**
 
 ![Screenshots](https://github.com/jopar219/PHtEubahkh/assets/6307954/f47df34e-e850-484a-9adb-1b1ee2dfacdc)
 
