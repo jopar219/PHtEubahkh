@@ -2,7 +2,7 @@
 
 Coding challege for gumroad.
 
-View live version here: https://gumroad-challenge.onrender.com. **Note images appear to be broken some hours after upload due to a limitation in the free tier**
+View live version here: https://gumroad-challenge.onrender.com. **Note images appear to be broken some hours after upload due to a limitation in render's free tier**
 
 ![Screenshots](https://github.com/jopar219/PHtEubahkh/assets/6307954/f47df34e-e850-484a-9adb-1b1ee2dfacdc)
 
