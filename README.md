@@ -61,3 +61,10 @@ If I were to make it again, I would improve on the following:
 * Add automated testing
 * Reevaluate the stack used. There seems to be a bit of friction when using a rails/react stack
 
+## What would I do differently
+* Had I decided to use tailwind instead of css-modules I would've probably finished 5 hours earlier.
+This is because there is more support for tailwind in rails and its better integrated in the assets pipeline.
+
+## Things I would keep the same
+* Using postresql, pgvector, and the neighbor gem was definitely the right decision. Using them probably saved me hours of work.
+
