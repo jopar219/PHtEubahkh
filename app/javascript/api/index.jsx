@@ -63,8 +63,7 @@ export const getBook = async (bookId) => {
   const res = await fetch(`/api/books/${bookId}`,);
 
   if (res.ok) {
-    const json = await res.json();
-    return json.book;
+    return await res.json();
   }
 
   throw new ApiError("Couldn't get book");

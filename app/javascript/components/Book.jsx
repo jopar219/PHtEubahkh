@@ -16,9 +16,7 @@ export default () => {
   const { getRandomQuestion, loading: randomQuestionLoading} = useApi("getRandomQuestion");
   
 
-  const [input, setInput] = useState(
-    "What is The Minimalist Entrepreneur about?"
-  );
+  const [input, setInput] = useState("");
   const [response, setResponse] = useState();
 
   const [book, setBook] = useState();
@@ -27,6 +25,7 @@ export default () => {
     (async () => {
       const book = await getBook(bookId);
       setBook(book);
+      setInput(book.default_question);
     })();
   }, [bookId]);
 
@@ -61,7 +60,7 @@ export default () => {
               <a href={book.link}>
                 <img className={styles.bookCover} src={book.cover}></img>
               </a>
-              <h2 className={styles.h2}>Ask My Book</h2>
+              <h2 className={styles.h2}>Ask {book.name}</h2>
               <p className={styles.p}>
                 This is an experiment in using AI to make a book's content more
                 accessible. Ask a question and AI'll answer it in real-time:

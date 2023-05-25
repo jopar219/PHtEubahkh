@@ -4,11 +4,27 @@ class Api::BooksController < Api::ApiController
     ##
     # Returns all books
     def index
-        @books = Book.all
+        books = Book.all.each.map do |book|
+            {
+                id: book.id,
+                name: book.name,
+                default_question: book.default_question,
+                cover: url_for(book.cover)
+            }
+        end
+
+        render json: { books: books }
     end
 
     def show
-        @book = Book.find(params["id"])
+        book = Book.find(params["id"])
+
+        render json: {
+            id: book.id,
+            name: book.name,
+            default_question: book.default_question,
+            cover: url_for(book.cover)
+        }
     end
 
     ##
@@ -17,7 +33,7 @@ class Api::BooksController < Api::ApiController
     def create
         openai = OpenAI::Client.new
 
-        reader = PDF::Reader.new(params["file"].to_io())
+        reader = PDF::Reader.new(params["pdf"].to_io())
 
         # Strategy:
         # · We first create a book model
@@ -29,9 +45,10 @@ class Api::BooksController < Api::ApiController
         ActiveRecord::Base.transaction do
 
             book = Book.create(
-                name: "Test",
-                cover: "/images/book.2a513df7cb86.png",
-                link: "https://www.amazon.com/Minimalist-Entrepreneur-Great-Founders-More/dp/0593192397"
+                name: params["name"],
+                cover: params["cover"],
+                link: params["link"],
+                default_question: params["default_question"]
             )
 
             puts "Processing #{reader.page_count} pages..."

@@ -1,3 +1,10 @@
 {
-    "books": <%= @books.to_json.html_safe %>
+    "books": <%= (@books.map do |book|
+        {
+            id: book.id,
+            name: book.name,
+            default_question: book.default_question,
+            cover: url_for(book.cover)
+        }
+    end).to_json.html_safe %>
 }

@@ -36,7 +36,6 @@
     opacity: 0.6;
 }
 
-
 .buttons {
     display: flex;
     margin: 0 auto;
@@ -45,4 +44,16 @@
 
 .buttons * {
     margin: 10px;
+}
+
+.flexCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.flexCol > * {
+    margin: 10px;
+}
+.flexCol input[type=text] {
+    width: 300px;
 }
