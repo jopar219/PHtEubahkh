@@ -5,7 +5,7 @@ require("esbuild").build({
   outdir: "app/assets/builds",
   bundle: true,
   publicPath: "assets",
-  sourcemap: true,
+  sourcemap: process.argv.includes("--watch"),
   watch: process.argv.includes("--watch"),
   plugins: [cssModules()]
 });
