@@ -1,38 +1,83 @@
-export const postQuestion = async (text) => {
-  const res = await fetch("/api/question", {
+
+export class ApiError extends Error {
+	constructor(message) {
+		super(message);
+		this.name = 'ApiError';
+	}
+}
+
+export const postQuestion = async (bookId, obj) => {
+  const res = await fetch(`/api/books/${bookId}/questions`, {
     method: "POST",
-    body: JSON.stringify({ text })
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obj)
   });
 
-  return res.json();
+  if (res.ok) {
+    return await res.json();
+  }
+
+  throw new ApiError("Couldn't create question");
 };
 
-export const imFeelingLucky = () => {
-  console.error("Not Implemented");
-  //   return fetch("/api/question", {
-  //     method: "POST",
-  //     body: JSON.stringify({ text }),
-  //     signal: abortController.signal,
-  //   });
+export const getSimilarQuestions = async (bookId, obj) => {
+  const searchParams = new URLSearchParams(obj);
+  const res = await fetch(`/api/books/${bookId}/questions/similar?${searchParams}`);
+
+  if (res.ok) {
+    return await res.json();
+  }
+
+  throw new ApiError("Couldn't create question");
 };
+
+
+export const getRandomQuestion = async (bookId) => {
+  const res = await fetch(`/api/books/${bookId}/questions/random`);
+
+  if (res.ok) {
+    return await res.json();
+  }
+
+  throw new ApiError("Couldn't create question");
+};
+
 
 export const createBook = async (formData) => {
-  const res = await fetch("/api/book", {
+  const res = await fetch("/api/books", {
     method: "POST",
     body: formData,
   });
 
-  return res.json();
+  if (res.ok) {
+    return await res.json();
+  }
+
+  throw new ApiError("Couldn't create book");
+
 }
 
-export const mock = () => {
-  return new Promise((res, rej) => {
-    setTimeout(
-      () =>
-        res(
-          "Debitis non saepe natus dolorum dignissimos unde nihil vero. Eum perspiciatis culpa ea omnis. Deserunt optio dolorem atque. Velit sapiente odit dicta consequuntur volup"
-        ),
-      800
-    );
-  });
-};
+export const getBook = async (bookId) => {
+  const res = await fetch(`/api/books/${bookId}`,);
+
+  if (res.ok) {
+    const json = await res.json();
+    return json.book;
+  }
+
+  throw new ApiError("Couldn't get book");
+}
+
+export const getBooks = async (formData) => {
+  const res = await fetch("/api/books",);
+
+  if (res.ok) {
+    const json = await res.json();
+    return json.books;
+  }
+
+  throw new ApiError("Couldn't get books");
+
+}

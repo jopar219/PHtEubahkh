@@ -10,74 +10,28 @@
     transform: scale(1.05);
 }
 
-.textarea {
-    box-sizing: border-box;
-    width: 100%;
-}
-
-.buttons {
-    display: flex;
-    margin: 0 auto;
-    justify-content: center;   
-}
-
-.buttons * {
-    margin: 10px;
-}
-
-.answerLabel {
-    display: inline;
-    font-weight: bold;
-    margin-right: .5em;
-}
-
-.answerBlock {
-    margin-bottom: 1em;
-}
-
-.response {
-    display: inline;
-}
-
 .spinner {
     margin-top: 3em;
     display: flex;
     justify-content: center;
 }
 
-.header {
-    background-color: var(--color-gray-800);
-    width: calc(100% - 20px);
-    padding: 10px;
-}
-.headerContent {
-    margin: 0 auto;
+.books {
     display: flex;
-    max-width: 1000px;
-    align-items: center;
-}
-.headerContent * {
-    margin-left: 10px;
-    margin-right: 10px;
-}
-.headerContent a {
-    text-align: center;
-    color: var(--color-gray-100);
-    text-decoration: none;
-    font-size: 2rem;
-    font-weight: bold;
-    width: 3em;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.headerContent :last-child {
-    width: 6em;
-}
-.headerContent h1 {
-    flex-grow: 1;
-    text-align: center;
+.books > * {
+    margin: 10px;
 }
 
-.h1 {
+.bookEntry {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.bookEntry > a > * {
     margin: 0;
-    color: var(--color-gray-100);
 }

@@ -1,13 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Index.module.css";
 import Spinner from "./Spinner.jsx";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import Container from "./Container";
+import { ErrorHandlerAlert } from "../contexts/ErrorHandling";
+import { useApi } from "../contexts/ApiContext";
+
+const Book = (props) => {
+  return (
+    <div className={styles.bookEntry}>
+      <Link to={`book/${props.id}`}>
+        <img className={styles.bookCover} src={props.cover} />
+      </Link>
+      <Link to={`book/${props.id}`}>
+        <h2 className={styles.bookName}>{props.name}</h2>
+      </Link>
+    </div>
+  );
+};
 
 export default () => {
+  const { getBooks, loading } = useApi("getBooks");
 
-  const [loading, setLoading] = useState(false);
+  const [books, setBooks] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const books = await getBooks();
+      setBooks(books);
+    })();
+  }, []);
 
   return (
     <>
@@ -17,19 +40,17 @@ export default () => {
         pageName={"Books"}
       />
       <Container>
+        <ErrorHandlerAlert />
         {loading ? (
           <div className={styles.spinner}>
             <Spinner />
           </div>
         ) : (
-          <Link to="/book/123">
-          <img
-            className={styles.bookCover}
-            src="images/book.2a513df7cb86.png"
-          ></img>
-        </Link>
+          <div className={styles.books}>
+            {books && books.map((book) => <Book key={book.id} {...book} />)}
+          </div>
         )}
       </Container>
-    </>)
-  ;
+    </>
+  );
 };

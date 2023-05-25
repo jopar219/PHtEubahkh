@@ -1,86 +1,108 @@
-import React, { useState, useRef, useCallback } from "react";
-import styles from "./Index.module.css";
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import styles from "./Book.module.css";
 import Spinner from "./Spinner.jsx";
 import Header from "./Header";
-
-import * as api from "../api";
 import Container from "./Container";
+import { useApi } from "../contexts/ApiContext";
+import { useParams } from "react-router-dom";
+import { ErrorHandlerAlert } from "../contexts/ErrorHandling";
 
 export default () => {
+  const { id: idSlug } = useParams();
+  const bookId = parseInt(idSlug);
+
+  const { getBook, loading: bookLoading } = useApi("getBook");
+  const { postQuestion, loading: responseLoading} = useApi("postQuestion");
+  const { getRandomQuestion, loading: randomQuestionLoading} = useApi("getRandomQuestion");
+  
+
   const [input, setInput] = useState(
     "What is The Minimalist Entrepreneur about?"
   );
   const [response, setResponse] = useState();
 
-  const [loading, setLoading] = useState(false);
+  const [book, setBook] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const book = await getBook(bookId);
+      setBook(book);
+    })();
+  }, [bookId]);
 
   const askQuestion = useCallback(async () => {
-    setLoading(true);
-    const response = await api.postQuestion(input);
-    if (response.answer)
-      setResponse(response.answer);
-    setLoading(false);
+    const response = await postQuestion(bookId, {
+      question: input
+    });
+    setResponse(response);
   }, [input]);
 
   const imFeelingLucky = useCallback(async () => {
-    setLoading(true);
-    const response = await api.mock();
-    setLoading(false);
+    const response = await getRandomQuestion(bookId);
     setResponse(response);
   }, []);
 
-  const clearResponse = useCallback(() => {
+  const clearAnswer = useCallback(() => {
     setResponse(undefined);
   }, []);
 
   return (
     <>
-      <Header
-        pageName={"The minimalist entrepreneur"}
-        showBackButton
-      />
+      <Header pageName={book?.name ?? "Book"} showBackButton />
       <Container>
-        <a href="https://www.amazon.com/Minimalist-Entrepreneur-Great-Founders-More/dp/0593192397">
-          <img
-            className={styles.bookCover}
-            src="/images/book.2a513df7cb86.png"
-          ></img>
-        </a>
-        <h2 className={styles.h2}>Ask My Book</h2>
-        <p className={styles.p}>
-          This is an experiment in using AI to make a book's content more
-          accessible. Ask a question and AI'll answer it in real-time:
-        </p>
+        <ErrorHandlerAlert />
+        {
+          book === undefined ? (
+            <div className={styles.spinner}>
+              <Spinner />
+            </div>
+          ) : (
+            <>
+              <a href={book.link}>
+                <img className={styles.bookCover} src={book.cover}></img>
+              </a>
+              <h2 className={styles.h2}>Ask My Book</h2>
+              <p className={styles.p}>
+                This is an experiment in using AI to make a book's content more
+                accessible. Ask a question and AI'll answer it in real-time:
+              </p>
 
-        {loading ? (
-          <div className={styles.spinner}>
-            <Spinner />
-          </div>
-        ) : response ? (
-          <>
-            <div className={styles.answerBlock}>
-              <label className={styles.answerLabel}>Answer:</label>
-              <p className={styles.response}>{response}</p>
-            </div>
-            <button onClick={clearResponse}>Ask another question</button>
-          </>
-        ) : (
-          <>
-            <textarea
-              className={styles.textarea}
-              rows={5}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
-            <div className={styles.buttons}>
-              <button onClick={askQuestion}>Ask question</button>
-              <button className="btn-secondary" onClick={imFeelingLucky}>
-                I'm feeling lucky
-              </button>
-            </div>
-          </>
-        )}
+              {responseLoading || randomQuestionLoading ? (
+                <div className={styles.spinner}>
+                  <Spinner />
+                </div>
+              ) : response ? (
+                <>
+                  <div className={styles.answerBlock}>
+                    <label className={styles.answerLabel}>Question:</label>
+                    <p className={styles.answer}>{response.question}</p>
+                  </div>
+                  <div className={styles.answerBlock}>
+                    <label className={styles.answerLabel}>Answer:</label>
+                    <p className={styles.answer}>{response.answer}</p>
+                  </div>
+                  <button onClick={clearAnswer}>Ask another question</button>
+                </>
+              ) : (
+                <>
+                  <textarea
+                    className={styles.textarea}
+                    rows={5}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                  />
+                  <div className={styles.buttons}>
+                    <button onClick={askQuestion}>Ask question</button>
+                    <button className="btn-secondary" onClick={imFeelingLucky}>
+                      I'm feeling lucky
+                    </button>
+                  </div>
+                </>
+              )}
+            </>
+          )
+        }
       </Container>
-    </>)
-  ;
+    </>
+  );
 };
